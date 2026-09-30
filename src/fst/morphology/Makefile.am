@@ -113,6 +113,66 @@ GT_DISTRO_SRCS=
 
 GIELLA_LOCAL_TARGETS=
 
+TAG_EXTRACTION_FST=$(builddir)/lexicon.tmp
+TAG_EXTRACTION_TTS_FST=$(builddir)/lexicon.tmp
+TAG_FILE=tags.txt
+LEX_TAG_FILE=lexicon-$(TAG_FILE)
+
+$(srcdir)/ext-Apertium-$(GLANG)/configure: \
+        $(srcdir)/ext-Apertium-$(GLANG)/configure.ac
+	$(AM_V_GEN)cd $(dir $@ ) && ./autogen.sh
+
+$(srcdir)/ext-Apertium-$(GLANG)/$(GLANG).automorf.att.gz: $(GT_LEXC_ROOT) \
+        $(srcdir)/ext-Apertium-$(GLANG)/configure
+	$(AM_V_GEN)cd $(dir $@ ) && $(MAKE) $(notdir $@ )
+
+.generated/lexicon.split.hfst: ext-Apertium-$(GLANG)/$(GLANG).automorf.att.gz \
+		$(GENDIR)
+	$(AM_V_TXT2FST)gunzip --stdout $< \
+		| sed -e "s/ /\'@_SPACE_@\'/g" \
+		| $(HFST_TXT2FST) $(MORE_VERBOSITY) $(HFST_FORMAT) --epsilon=ε \
+		| $(HFST_INVERT) $(MORE_VERBOSITY) \
+		-o $@
+
+# XXX: I hardcoded 4 splits here cause writing bash script for pairwise joining
+# is an effort
+.generated/lexicon.tmp.hfst: .generated/lexicon.split.hfst
+	$(AM_V_GEN)$(HFST_SPLIT) -i $< -p ".generated/splits-"
+	$(AM_V_GEN)$(HFST_DISJUNCT) -1 .generated/splits-1.hfst \
+			-2 .generated/splits-2.hfst |\
+			$(HFST_DISJUNCT) -1 - -2 .generated/splits-3.hfst |\
+			$(HFST_DISJUNCT) -1 - -2 .generated/splits-4.hfst -o $@
+
+.generated/lexicon-tags.txt: .generated/lexicon-sigma.txt
+	$(AM_V_GEN)grep '<.*>' $< > $@
+
+# To produce init uppercase tags, use this (the \u is the crucial part):
+# 		| perl -pe 's/^(.)/+\u$$1/'
+# But by leaving that out, the tags are actually directly compatible with the
+# CG disamb file, which is a huge boon, so we stick with that for now:
+.generated/lexicon-tags.relabel: .generated/lexicon-tags.txt
+	$(AM_V_GEN)sed -e 's/<//' -e 's/>//' $< \
+		| perl -pe 's/^(.)/+$$1/' \
+		| paste $< - > $@
+
+# Relabel analyser tags from Apertium style to GiellaLT style.
+#
+# Overriding lexc-include.am's GT_LEXICON_HFST_DEPS/_RECIPE (giella-core
+# >= 1.14.0) instead of defining our own ".generated/lexicon.hfst:" rule:
+# that target is already defined there too, and a second definition here
+# would just silently lose the "last definition wins" race whenever that
+# shared file's own rule ordering changes -- which is exactly what used
+# to happen here (only an "overriding recipe" warning, no error, so it
+# went unnoticed: this file's own .generated/lexicon.hfst, built from the
+# Apertium subtree, was never actually used -- the generic hfst-lexc
+# rule silently won instead, building from the near-empty root.lexc).
+GT_LEXICON_HFST_DEPS = .generated/lexicon.tmp.hfst .generated/lexicon-tags.relabel
+
+define GT_LEXICON_HFST_RECIPE
+	$(AM_V_HSUBST)$(HFST_SUBSTITUTE) $(MORE_VERBOSITY) $(HFSTFLAGS) \
+		-i $< --from-file=.generated/lexicon-tags.relabel -o $@
+endef
+
 ### END: Local processing: ###
 
 ####### Other targets: ###########
