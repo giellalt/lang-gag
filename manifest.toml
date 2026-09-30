@@ -14,7 +14,7 @@ gag = "TRANSLATE: A spellchecker for Gagauz, made by members of the language com
 system_pkg_id = "no.divvun.MacDivvun.gag"
 
 [windows]
-system_product_code = "{REPLACE_WITH_REAL_SYSTEM_PROD_CODE}_is1"
+system_product_code = "{CEF28534-5F97-4C71-ACE3-94FE40036BAA}_is1"
 
 [package.speller]
 name = "Gagauz"
