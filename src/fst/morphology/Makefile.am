@@ -134,14 +134,10 @@ $(srcdir)/ext-Apertium-$(GLANG)/$(GLANG).automorf.att.gz: $(GT_LEXC_ROOT) \
 		| $(HFST_INVERT) $(MORE_VERBOSITY) \
 		-o $@
 
-# XXX: I hardcoded 4 splits here cause writing bash script for pairwise joining
-# is an effort
+# gag has a single Apertium lexicon source, so there is nothing to split and
+# disjunct back together (unlike the repo this rule was copied from):
 .generated/lexicon.tmp.hfst: .generated/lexicon.split.hfst
-	$(AM_V_GEN)$(HFST_SPLIT) -i $< -p ".generated/splits-"
-	$(AM_V_GEN)$(HFST_DISJUNCT) -1 .generated/splits-1.hfst \
-			-2 .generated/splits-2.hfst |\
-			$(HFST_DISJUNCT) -1 - -2 .generated/splits-3.hfst |\
-			$(HFST_DISJUNCT) -1 - -2 .generated/splits-4.hfst -o $@
+	$(AM_V_GEN)cp $< $@
 
 .generated/lexicon-tags.txt: .generated/lexicon-sigma.txt
 	$(AM_V_GEN)grep '<.*>' $< > $@
