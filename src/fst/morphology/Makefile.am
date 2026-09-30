@@ -66,7 +66,7 @@ GENERATED_LEXC_SRCS=generated_files/mul-$(GLANG)-punctuation.lexc \
 
 # change handling of shared lexical data here:
 if HAVE_SHARED_COMMON
-.generated/url.tmp.lexc: $(gt_SHARED_common)/src/fst/url.lexc
+.generated/url.tmp.lexc: $(gt_SHARED_common)/src/fst/morphology/url.lexc
 	$(MAKE) $(GENDIR)
 	$(AM_V_CP)cp -f $< $@
 
