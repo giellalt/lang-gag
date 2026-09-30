@@ -1,0 +1,50 @@
+* text=auto !eol
+/AUTHORS -text
+/COPYING -text
+/ChangeLog -text
+/INSTALL -text
+/Makefile.am -text
+/NEWS -text
+/README -text
+/apertium-gag.err.twol -text
+/apertium-gag.gag.lexc -text
+/apertium-gag.gag.rlx -text
+/apertium-gag.gag.twol -text
+/apertium-gag.pc.in -text
+/apertium-gag.post-gag.dix -text
+/autogen.sh -text
+/configure.ac -text
+dev/countstems.sh -text
+dev/eval.tsv -text
+dev/spellrelax.twol -text
+dev/verbs/Makefile -text
+dev/verbs/verbs.lexc -text
+/gag.prob -text svneol=unset#unset
+/modes.xml -text
+tests/accusative.tsv -text
+tests/copula.tsv -text
+tests/dative.tsv -text
+tests/digits.tsv -text
+tests/drop-cns.tsv -text
+tests/finite.tsv -text
+tests/future.tsv -text
+tests/genitive.tsv -text
+tests/gerunds.tsv -text
+tests/imperative.tsv -text
+tests/loans.tsv -text
+tests/negative.tsv -text
+tests/passive.tsv -text
+tests/past.tsv -text
+tests/pers-pron.tsv -text
+tests/possessives.tsv -text
+tests/spellrelax.tsv -text
+tests/su.tsv -text
+tests/test.py -text
+texts/aorpre.txt -text
+texts/sentences.txt -text
+texts/verbal.txt -text
+*.dix linguist-language=XML linguist-detectable=true
+*.lrx linguist-language=XML linguist-detectable=true
+*.lsx linguist-language=XML linguist-detectable=true
+*.tsx linguist-language=XML linguist-detectable=true
+*.t[[:digit:]]x linguist-language=XML linguist-detectable=true
