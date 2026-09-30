@@ -1,0 +1,11 @@
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.bundle/
+.sass-cache/
+vendor/
+Gemfile.lock
+
+# Local speller-accuracy preview scratch (docs/typosreport/preview.sh)
+typosreport/.viewer/
+typosreport/.preview/

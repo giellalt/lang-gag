@@ -1,0 +1,11 @@
+template = ""
+rev_id = 345
+template_sha = "f04ff6c72fd325cdfed0bbaee815bd2f43d847a7"
+
+[replacements]
+__GLOTTOLOG_ID__ = "gaga1249"
+__LICENSE__ = "LGPLv3"
+__REPO__ = "lang-gag"
+__UND2C__ = "gag"
+__UNDEFINED__ = "Gagauz"
+__UND__ = "gag"
